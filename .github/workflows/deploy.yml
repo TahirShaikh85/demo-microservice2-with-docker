@@ -1,0 +1,37 @@
+name: Deploy second test NodeJS micoservice
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Create .env file
+        run: |
+          echo "DEVELOPER=${{ secrets.DEVELOPER }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
+      - name: login to docker hub
+        run: run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: list files in the directory
+        run: ls -la
+      - name: Build docker image
+        run: docker build -t tahir85/docker-ci-cd-two .
+      - name: Publish image to docker hub
+        run: docker push tahir85/docker-ci-cd-two:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull tahir85/docker-ci-cd-two:latest
+      - name: Delete old container
+        run: docker rm -f docker-ci-cd-two-container 
+      - name: Run docker container
+        run: docker run -d -p 80:80 --name docker-ci-cd-two-container tahir85/docker-ci-cd-two
