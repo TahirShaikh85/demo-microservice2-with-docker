@@ -1,9 +1,21 @@
 const express = require('express');
 const PORT = process.env.PORT;
+const cors = require('cors');
 const app = express();
 const VideoSchema = require('./database/VideoModel');
 
 app.use(express.json());
+
+// Configure CORS
+const corsOptions = {
+    origin: ['https://fitmastery.in','http://127.0.0.1:5500'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+};
+
+// Apply the CORS middleware
+app.use(cors(corsOptions));
 
 // database connection
 require('./database/connection')();
@@ -11,6 +23,9 @@ require('./database/connection')();
 
 // health route
 app.get('/', (req, res) => {
+    console.log("req headers 📌:", req.headers);
+    console.log("res headers 😀:", res.headers);
+
     return res.status(200).send("This is the second microservice of learning-microservice containerizatin on EC2")
 })
 
