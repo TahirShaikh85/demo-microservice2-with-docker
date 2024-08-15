@@ -8,9 +8,9 @@ app.use(express.json());
 
 // Configure CORS
 const corsOptions = {
-    origin: ['https://fitmastery.in','http://127.0.0.1:5500'],
+    origin: ['https://fitmastery.in', 'http://127.0.0.1:5500'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'api_key'],
     credentials: true,
 };
 
