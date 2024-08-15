@@ -11,7 +11,7 @@ require('./database/connection')();
 
 // health route
 app.get('/', (req, res) => {
-    return res.status(200).send("This is the second microservice")
+    return res.status(200).send("This is the second microservice of learning-microservice containerizatin on EC2")
 })
 
 // get data from db
